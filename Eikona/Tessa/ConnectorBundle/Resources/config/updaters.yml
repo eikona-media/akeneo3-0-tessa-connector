@@ -1,0 +1,8 @@
+services:
+    pim_catalog.updater.setter.eikona_catalog_tessa:
+        class: Eikona\Tessa\ConnectorBundle\Updater\TessaAttributeSetter
+        parent: pim_catalog.updater.setter.abstract
+        arguments:
+            - ['eikona_catalog_tessa']
+        tags:
+            - { name: 'pim_catalog.updater.setter' }

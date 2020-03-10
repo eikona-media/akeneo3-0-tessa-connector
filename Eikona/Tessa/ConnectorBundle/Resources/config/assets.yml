@@ -1,0 +1,7 @@
+css:
+    eikonatessaconnector:
+        - bundles/eikonatessaconnector/css/asset-gallery.less
+        - bundles/eikonatessaconnector/css/attribute-type.less
+        - bundles/eikonatessaconnector/css/datagrid.less
+        - bundles/eikonatessaconnector/css/menu-tab-tessa.scss
+        - bundles/eikonatessaconnector/css/thumbnail.less

@@ -1,0 +1,32 @@
+services:
+  pim_enrich.normalizer.file:
+    class: Eikona\Tessa\ConnectorBundle\Extension\Normalizer\Standard\FileNormalizer
+    tags:
+      - { name: pim_internal_api_serializer.normalizer }
+
+  eikona.tessa.normalizer.tessa_queue:
+    class: Eikona\Tessa\ConnectorBundle\Normalizer\TessaQueueNormalizer
+    arguments:
+      - '@eikona.utilities.id_prefixer'
+      - '@pim_standard_format_serializer'
+      - '@eikona.tessa.normalizer.standard.product'
+
+  # ProductNormalizer ohne Berechtigungsabfragen (1)
+  eikona.tessa.query.get_associated_product_codes_by_product:
+    class: 'Akeneo\Pim\Enrichment\Bundle\Doctrine\ORM\Query\GetAssociatedProductCodesByProductFromDB'
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '%pim_catalog.entity.association.class%'
+
+  # ProductNormalizer ohne Berechtigungsabfragen (2)
+  eikona.tessa.normalizer.standard.product.associations:
+    class: '%pim_catalog.normalizer.standard.product.associations.class%'
+    arguments:
+      - '@eikona.tessa.query.get_associated_product_codes_by_product'
+
+  # ProductNormalizer ohne Berechtigungsabfragen (3)
+  eikona.tessa.normalizer.standard.product:
+    class: '%pim_catalog.normalizer.standard.product.class%'
+    arguments:
+      - '@pim_catalog.normalizer.standard.product.properties'
+      - '@eikona.tessa.normalizer.standard.product.associations'

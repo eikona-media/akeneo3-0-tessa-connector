@@ -1,0 +1,5 @@
+services:
+  eikona.form.type.tessa:
+    class: Eikona\Tessa\ReferenceDataBundle\Form\TessaType
+    tags:
+      - { name: form.type, alias: eikona_form_tessa }

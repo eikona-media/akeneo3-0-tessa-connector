@@ -1,0 +1,6 @@
+config:
+  paths:
+    eikona/tessa/connector/reference-data/form/field: eikonatessareferencedata/js/reference-data/form/field
+    eikona/tessa/connector/reference-data/product/field/tessa: eikonatessareferencedata/templates/product/field/tessa.html
+
+

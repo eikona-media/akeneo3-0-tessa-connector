@@ -1,0 +1,9 @@
+services:
+    eikona.tessa.factory.value.tessa:
+        class: Eikona\Tessa\ConnectorBundle\AttributeType\Factory\TessaValueFactory
+        public: false
+        arguments:
+            - 'Eikona\Tessa\ConnectorBundle\AttributeType\Value\TessaAssetsValue'
+            - 'eikona_catalog_tessa'
+        tags:
+            - { name: pim_catalog.factory.value }

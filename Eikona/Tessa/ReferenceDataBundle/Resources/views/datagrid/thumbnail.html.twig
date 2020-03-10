@@ -1,0 +1,13 @@
+{% set assetIds = value|split(',') %}
+<div class="datagrid-cell-tessa">
+    {% if assetIds|length > 0 %}
+        <div class="image">
+            <img src="{{ path('eikona_tessa_media_preview', {assetId: assetIds[0]}) }}">
+        </div>
+        {% if assetIds|length > 1 %}
+            <div class="more">
+                + {{ assetIds|length - 1 }}
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
