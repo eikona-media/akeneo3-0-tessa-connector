@@ -83,7 +83,7 @@ export default class TessaAssetSelectionModal extends React.Component<Props> {
       context: JSON.stringify({
         locale: this.props.locale,
         scope: this.props.channel,
-        data: this.props.selectedAssetIds,
+        data: this.props.selectedAssetIds.join(','),
       })
     };
 
