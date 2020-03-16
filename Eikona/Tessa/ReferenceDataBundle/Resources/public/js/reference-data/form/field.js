@@ -213,7 +213,7 @@ define(
           context: JSON.stringify({
             locale: null,
             scope: null,
-            data: this.getAssetIdsArray()
+            data: this.getModelValue()
           })
         };
 
