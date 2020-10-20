@@ -7,6 +7,7 @@ services:
             - '@pim_catalog.repository.product'
             - '@pim_catalog.repository.product_model'
             - '@eikona.tessa.notification_queue.service'
+            - '@pim_user.context.user'
         tags:
             - { name: kernel.event_listener, event: akeneo.storage.post_save, method: onPostSave }
             - { name: kernel.event_listener, event: akeneo.storage.pre_remove, method: onPreRemove }

@@ -30,6 +30,9 @@ tessa:
     syncinbackground:
       label: Synchronisation en arrière-plan
       description: Synchroniser l'information avec TESSA dans l'arrière-plan bloc par bloc
+    userusedbytessa:
+      label: Nom d'utilisateur pour Akeneo API
+      description: Utilisateur d'Akeneo utilisé par TESSA pour accéder à l'API d'Akeneo
     tab:
       label: TESSA
     link:

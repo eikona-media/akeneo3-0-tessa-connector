@@ -31,6 +31,9 @@ tessa:
     syncinbackground:
       label: Im Hintergrund synchronisieren
       description: Informationen mit TESSA im Hintergrund blockweise synchronisieren
+    userusedbytessa:
+      label: Benutzername für Akeneo-API
+      description: Akeneo Benutzer, der von TESSA für den Zugriff auf die Akeneo-API verwendet wird
     tab:
       label: TESSA
     link:

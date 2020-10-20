@@ -49,7 +49,9 @@ define(
           systemidentifier: this.getFormData().pim_eikona_tessa_connector___system_identifier ?
             this.getFormData().pim_eikona_tessa_connector___system_identifier.value : '',
           syncinbackground: this.getFormData().pim_eikona_tessa_connector___sync_in_background ?
-            this.getFormData().pim_eikona_tessa_connector___sync_in_background.value : false
+            this.getFormData().pim_eikona_tessa_connector___sync_in_background.value : false,
+          userUsedByTessa: this.getFormData().pim_eikona_tessa_connector___user_used_by_tessa ?
+            this.getFormData().pim_eikona_tessa_connector___user_used_by_tessa.value : ''
         }));
 
         this.$el.find('.switch').bootstrapSwitch();

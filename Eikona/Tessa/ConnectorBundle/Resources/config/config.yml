@@ -21,3 +21,6 @@ pim_eikona_tessa_connector:
         chunk_size:
             value: 100
             scope: app
+        user_used_by_tessa:
+            value: ~
+            scope: app

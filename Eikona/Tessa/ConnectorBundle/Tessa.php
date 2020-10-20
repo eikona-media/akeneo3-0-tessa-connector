@@ -55,6 +55,9 @@ class Tessa
     /** @var int */
     protected $chunkSize;
 
+    /** @var string */
+    protected $userUsedByTessa;
+
     /** @var TessaQueueNormalizer */
     protected $tessaQueueNormalizer;
 
@@ -81,6 +84,7 @@ class Tessa
         $this->systemIdentifier = trim($oroGlobal->get('pim_eikona_tessa_connector.system_identifier'));
         $this->syncInBackground = (bool)$oroGlobal->get('pim_eikona_tessa_connector.sync_in_background');
         $this->chunkSize = (int)$oroGlobal->get('pim_eikona_tessa_connector.chunk_size');
+        $this->userUsedByTessa = trim($oroGlobal->get('pim_eikona_tessa_connector.user_used_by_tessa'));
         $this->kernel = $kernel;
         $this->logger = $logger;
         $this->tessaQueueNormalizer = $tessaQueueNormalizer;
@@ -148,6 +152,14 @@ class Tessa
     public function getChunkSize(): int
     {
         return $this->chunkSize;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserUsedByTessa()
+    {
+        return $this->userUsedByTessa;
     }
 
     /**

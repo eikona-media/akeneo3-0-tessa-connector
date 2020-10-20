@@ -31,6 +31,9 @@ tessa:
     syncinbackground:
       label: Sync in background
       description: Sync informations with TESSA in chunks in background
+    userusedbytessa:
+      label: User name for Akeneo-API
+      description: Akeneo user, which is used by TESSA for access to the Akeneo-API
     tab:
       label: TESSA
     link:

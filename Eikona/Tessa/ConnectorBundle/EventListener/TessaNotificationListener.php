@@ -16,6 +16,7 @@ use Akeneo\Pim\Enrichment\Component\Product\Repository\ProductModelRepositoryInt
 use Akeneo\Pim\Enrichment\Component\Product\Repository\ProductRepositoryInterface;
 use Akeneo\Tool\Component\Classification\Model\CategoryInterface;
 use Akeneo\Tool\Component\StorageUtils\Event\RemoveEvent;
+use Akeneo\UserManagement\Bundle\Context\UserContext;
 use Doctrine\ORM\EntityManager;
 use Eikona\Tessa\ConnectorBundle\Services\TessaNotificationQueueService;
 use Eikona\Tessa\ConnectorBundle\Tessa;
@@ -41,19 +42,24 @@ class TessaNotificationListener
     /** @var TessaNotificationQueueService */
     protected $tessaNotificationQueueService;
 
+    /** @var UserContext */
+    protected $userContext;
+
     /**
-     * @param Tessa $tessa
-     * @param EntityManager $entityManager
-     * @param ProductRepositoryInterface $productRepository
+     * @param Tessa                           $tessa
+     * @param EntityManager                   $entityManager
+     * @param ProductRepositoryInterface      $productRepository
      * @param ProductModelRepositoryInterface $productModelRepository
-     * @param TessaNotificationQueueService $tessaNotificationQueueService
+     * @param TessaNotificationQueueService   $tessaNotificationQueueService
+     * @param UserContext                     $userContext
      */
     public function __construct(
         Tessa $tessa,
         EntityManager $entityManager,
         ProductRepositoryInterface $productRepository,
         ProductModelRepositoryInterface $productModelRepository,
-        TessaNotificationQueueService $tessaNotificationQueueService
+        TessaNotificationQueueService $tessaNotificationQueueService,
+        UserContext $userContext
     )
     {
         $this->tessa = $tessa;
@@ -61,6 +67,7 @@ class TessaNotificationListener
         $this->productRepository = $productRepository;
         $this->productModelRepository = $productModelRepository;
         $this->tessaNotificationQueueService = $tessaNotificationQueueService;
+        $this->userContext = $userContext;
     }
 
     /**
@@ -68,6 +75,10 @@ class TessaNotificationListener
      */
     public function onPostSave(GenericEvent $event)
     {
+        if (!$this->shouldNotify()) {
+            return;
+        }
+
         $subject = $event->getSubject();
 
         if ($subject instanceof CategoryInterface || $subject instanceof ChannelInterface || $subject instanceof GroupInterface) {
@@ -150,6 +161,10 @@ class TessaNotificationListener
      */
     public function onPreRemove(RemoveEvent $event)
     {
+        if (!$this->shouldNotify()) {
+            return;
+        }
+
         $id = $event->getSubjectId();
         $subject = $event->getSubject();
 
@@ -193,6 +208,10 @@ class TessaNotificationListener
      */
     public function onPostRemove(RemoveEvent $event)
     {
+        if (!$this->shouldNotify()) {
+            return;
+        }
+
         $id = $event->getSubjectId();
         $subject = $event->getSubject();
 
@@ -225,5 +244,18 @@ class TessaNotificationListener
                 unset($this->productModelStore[$id]);
             }
         }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function shouldNotify(): bool
+    {
+        $user = $this->userContext->getUser();
+        if ($user !== null
+            && $user->getUsername() === $this->tessa->getUserUsedByTessa()) {
+            return false;
+        }
+        return true;
     }
 }
