@@ -20,7 +20,12 @@ use Akeneo\UserManagement\Bundle\Context\UserContext;
 use Doctrine\ORM\EntityManager;
 use Eikona\Tessa\ConnectorBundle\Services\TessaNotificationQueueService;
 use Eikona\Tessa\ConnectorBundle\Tessa;
+use Psr\Http\Message\RequestInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\Router;
 
 class TessaNotificationListener
 {
@@ -45,6 +50,9 @@ class TessaNotificationListener
     /** @var UserContext */
     protected $userContext;
 
+    /** @var RequestStack */
+    protected $requestStack;
+
     /**
      * @param Tessa                           $tessa
      * @param EntityManager                   $entityManager
@@ -52,6 +60,7 @@ class TessaNotificationListener
      * @param ProductModelRepositoryInterface $productModelRepository
      * @param TessaNotificationQueueService   $tessaNotificationQueueService
      * @param UserContext                     $userContext
+     * @param RequestStack                    $requestStack
      */
     public function __construct(
         Tessa $tessa,
@@ -59,7 +68,8 @@ class TessaNotificationListener
         ProductRepositoryInterface $productRepository,
         ProductModelRepositoryInterface $productModelRepository,
         TessaNotificationQueueService $tessaNotificationQueueService,
-        UserContext $userContext
+        UserContext $userContext,
+        RequestStack $requestStack
     )
     {
         $this->tessa = $tessa;
@@ -68,6 +78,7 @@ class TessaNotificationListener
         $this->productModelRepository = $productModelRepository;
         $this->tessaNotificationQueueService = $tessaNotificationQueueService;
         $this->userContext = $userContext;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -251,11 +262,26 @@ class TessaNotificationListener
      */
     protected function shouldNotify(): bool
     {
-        $user = $this->userContext->getUser();
-        if ($user !== null
-            && $user->getUsername() === $this->tessa->getUserUsedByTessa()) {
-            return false;
+        if ($this->requestStack->getCurrentRequest() === null) {
+            return true;
         }
-        return true;
+
+        /** @var Route $route */
+        $route = $this->requestStack->getCurrentRequest()->get('_route');
+        if ($route !== 'pim_api_product_partial_update' && $route !== 'pim_api_product_model_partial_update') {
+            return true;
+        }
+
+        $user = $this->userContext->getUser();
+        if ($user === null) {
+            return true;
+        }
+
+        $tessaUser = $this->tessa->getUserUsedByTessa();
+        if ($user->getUsername() !== $tessaUser) {
+            return true;
+        }
+
+        return false;
     }
 }
